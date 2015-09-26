@@ -1,0 +1,62 @@
+0, 0, All
+0, 1, Automotive and Industrial
+1, 11, SUV
+1, 12, Sedan
+0, 2, Books
+2, 13, Fiction
+2, 14, Non-fiction
+2, 15, Calendars
+2, 16, Card Decks
+2, 17, Sheet Music
+2, 18, Magazines
+2, 19, Journals,
+2, 20, Other Publications
+0, 3, Clothing, Shoes and Jewelry
+3, 21, Clothing
+3, 22, Shoes
+3, 23, Jewelery
+0, 4, Electronics and Computers
+4, 24, Electronics Accessories
+24, 25, Audio
+24, 26, Video
+24, 27, Camera
+24, 28, Photo
+24, 29, Cell Phone
+24, 30, Car Electronics
+24, 31, Computer
+24, 32, Office Accessories
+4, 33, Consumer Electronics
+33, 34, TVs
+33, 35, CD Players
+33, 36, Car Audio
+33, 37, GPS
+4, 38, Camera & Photo
+38, 39, Cameras
+38, 40, Camcorders
+38, 41, Telescopes
+4, 42 Cell Phones
+0, 5, Health and Beauty
+5, 43, Beauty
+43, 44, Fragrance
+43, 45, Skincare
+43, 46, Makeup
+43, 47, Hair Care
+43, 48, Bath and Shower
+0, 6, Groceries
+6, 49,Beverages
+6, 50, Breakfast
+6, 51, Canned Goods
+6, 52, Household Supplies
+6, 53, Snacks
+6, 54, Meat
+6, 55, Seafood
+6, 56, Chocolate
+6, 57, Desserts
+6, 58, Gift Baskets
+6, 59, Health & Personal Care
+59, 60, First Aid
+59, 61, Nutrition
+0, 7, Home, Garden and Tools
+0, 8, Movies, Music and Games						
+0, 9, Sports and Outdoors
+0, 10, Toys, Kids and Baby

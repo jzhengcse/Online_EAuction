@@ -1,0 +1,219 @@
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE database IF NOT EXISTS Eauction;
+USE Eauction ;
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`User`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS User (
+	UserID			int not null,
+	Password		char(30) not null,
+	AccountType     char(30) not null,
+	FirstName		char(20) not null,
+	MiddleName		char(20),
+	LastName		char(20) not null,
+	Membership		char(30) not null,
+	EmailAddress	char(60) not null,
+	Street			char(30),
+	City			char(30),
+	State			char(30),
+	ZipCode			char(30),
+	Phone			char(30),
+	CreditNum		char(16),
+	CreditType		char(30),
+	CreditCVN		char(30),
+	CreditExpire	date,	
+	PRIMARY KEY		(UserID));
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Individual`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS Individual (
+	UserID			INT NOT NULL,
+	Age				INT NULL,
+	Gender			CHAR(20) NULL,
+	AnnualIncome	DOUBLE NULL,
+	Birthday		DATE NULL,
+	PRIMARY KEY		(UserID));
+
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Company`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS Company (
+	UserID			INT NOT NULL,
+	PointofContact	CHAR(60) NOT NULL,
+	CompanyCategory CHAR(20) NOT NULL,
+	Revenue			DOUBLE NULL,
+	CompanyName		CHAR(60) NOT NULL,
+	PRIMARY KEY		(UserID));
+
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS Category (
+	CategoryID      INT NOT NULL,
+	ParentID		int not null,
+	Name			VARCHAR(100) NOT NULL,
+	PRIMARY KEY		(CategoryID));
+
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Sell_BelongTo_Item`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS Item (
+	ItemID INT NOT NULL,
+	UserID INT NOT NULL,
+	CategoryID INT NOT NULL,
+	Name CHAR(100) NOT NULL,
+	Description VARCHAR(1000) NULL,
+	BuyItNowPrice DOUBLE NOT NULL,
+	ReservePrice DOUBLE NOT NULL,
+	Street CHAR(100) NULL,
+	City CHAR(100) NULL,
+	State CHAR(100) NULL,
+	Picture CHAR(100) NULL,
+	URL VARCHAR(10000) NULL,
+	PRIMARY KEY (ItemID),
+	FOREIGN KEY (UserID)
+	REFERENCES User (UserID)
+	ON DELETE NO ACTION
+	ON UPDATE NO ACTION,
+	FOREIGN KEY (CategoryID)
+	REFERENCES Category (CategoryID)
+	ON DELETE NO ACTION
+	ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Sell_Auction`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Auction` (
+  `AuctionID` INT NOT NULL,
+  `ItemID` INT NOT NULL,
+  `UserID` INT NOT NULL,
+  `WinnerID` INT NULL,
+  `HighestBidPrice` DOUBLE NULL,
+  `IsOver` TINYINT(1) NULL,
+  `IsVoid` TINYINT(1) NULL,
+  `IsButItNow` TINYINT(1) NULL,
+  `Rating` DOUBLE NULL,
+  `Comments` VARCHAR(10000) NULL,
+  `Quantity` INT NULL,
+  `Discount` DOUBLE NULL,
+  PRIMARY KEY (`AuctionID`),
+  INDEX `UserID_idx` (`UserID` ASC),
+  INDEX `ItemID_idx` (`ItemID` ASC),
+    FOREIGN KEY (`UserID`)
+    REFERENCES `E-Auction`.`User` (`UserID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (`ItemID`)
+    REFERENCES `Item` (`ItemID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (`UserID`)
+    REFERENCES `E-Auction`.`User` (`UserID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- -----------------------------------------------------
+-- Table `E-Auction`.`Bid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Bid` (
+  `BidderID` INT NOT NULL,
+  `AuctionID` INT NOT NULL,
+  `BidPrice` DOUBLE NOT NULL,
+  `BidTime` DATETIME NOT NULL,
+	PRIMARY KEY (`BidderID`, `AuctionID`),
+    FOREIGN KEY (`BidderID`)
+    REFERENCES `E-Auction`.`User` (`UserID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+    FOREIGN KEY (`AuctionID`)
+    REFERENCES `Auction` (`AuctionID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+INSERT INTO `user` 
+(`UserID`, Password, AccountType, `FirstName`, `LastName`, `Membership`, `EmailAddress`,Street, City, State, ZipCode, Phone, CreditNum, CreditType, CreditCVN, CreditExpire ) 
+VALUES ('1', '123','Individual','Yang', 'Meng',  '5', 'yang@psu.edu','Fraser St','State College','PA','16801','8149999999','1431142342135345','Vista','123','2016-03-21');
+
+INSERT INTO `user` 
+(`UserID`, Password,AccountType, `FirstName`, `LastName`, `Membership`, `EmailAddress`,Street, City, State, ZipCode, Phone, CreditNum, CreditType, CreditCVN, CreditExpire ) 
+VALUES ('2', '123','Individual','Xianlian', 'Zhang', '5', 'xianliang@psu.edu','Fraser St','State College','PA','16801','8149999998','1431142342135346','Master','124','2016-03-21');
+
+INSERT INTO `user` 
+(`UserID`, Password, AccountType,`FirstName`, `LastName`, `Membership`, `EmailAddress`,Street, City, State, ZipCode, Phone, CreditNum, CreditType, CreditCVN, CreditExpire ) 
+VALUES ('3','123', 'Company','Sobe', 'Kaushal',  '5', 'sobe@psu.edu','Fraser St','State College','PA','16801','8149999997','1431142342135347','Vista','125','2016-03-21');
+
+INSERT INTO `individual` 
+(`UserID`, `Age`, `Gender`, `AnnualIncome`,birthday) 
+VALUES ('1', '18', 'Male', '100000','1993-01-01');
+
+INSERT INTO `individual` 
+(`UserID`, `Age`, `Gender`, `AnnualIncome`,birthday) 
+VALUES ('2', '19', 'Male', '999999','1992-01-01');
+
+INSERT INTO `company` 
+(`UserID`, `PointofContact`, `CompanyCategory`, `Revenue`, `CompanyName`) 
+VALUES ('3', 'Sobe', 'Shoes', '999999', 'SobeShoes');
+
+INSERT INTO `category` (`CategoryID`, ParentID, `Name`) VALUES (1, 0,'All');
+INSERT INTO `category` (`CategoryID`, ParentID,`Name`) VALUES (2,0, 'Car');
+INSERT INTO `category` (`CategoryID`, ParentID,`Name`) VALUES (3, 0, 'Electronics');
+
+INSERT INTO `item` 
+(`ItemID`, `UserID`, `CategoryID`, `Name`, `Description`, `BuyItNowPrice`, `ReservePrice`, `Street`, `City`, `State`, `Picture`) 
+VALUES ('1', '1', '2', 'Q5', 'SUV', '55000', '50000', '101 College Ave', 'State College', 'PA', 'images/1.jpg');
+INSERT INTO item 
+(`ItemID`, `UserID`, `CategoryID`, `Name`, `Description`, `BuyItNowPrice`, `ReservePrice`, `Street`, `City`, `State`, `Picture`) 
+VALUES ('2', '2', '3', 'Mac Air', 'light', '1200', '1000', '102 College Ave', 'State College', 'PA', 'images/2.jpg');
+INSERT INTO item 
+(`ItemID`, `UserID`, `CategoryID`, `Name`, `Description`, `BuyItNowPrice`, `ReservePrice`, `Street`, `City`, `State`, `Picture`) 
+VALUES ('3', '3', '3', 'Satellite', 'GPS Position', '10000000', '9000000', '103 College Ave', 'State College', 'PA', 'images/3.jpg');
+
+INSERT INTO item 
+(`ItemID`, `UserID`, `CategoryID`, `Name`, `Description`, `BuyItNowPrice`, `ReservePrice`, `Street`, `City`, `State`, `Picture`) 
+VALUES (4, '3', '3', 'Breaking Bad', 'Fun TV show', '10000000', '9000000', '103 College Ave', 'State College', 'PA', 'images/4.jpg');
+
+INSERT INTO item 
+(`ItemID`, `UserID`, `CategoryID`, `Name`, `Description`, `BuyItNowPrice`, `ReservePrice`, `Street`, `City`, `State`, `Picture`) 
+VALUES (5, '3', '3', 'Call Of Duty', 'Game', '10000000', '9000000', '103 College Ave', 'State College', 'PA', 'images/5.jpg');
+
+
+INSERT INTO auction 
+(`AuctionID`, `ItemID`, `UserID`, `WinnerID`, `HighestBidPrice`, `IsOver`, `IsVoid`, `IsButItNow`, `Rating`, `Comments`, `Quantity`) 
+VALUES ('1', '1', '3', '3', '50000', '1', '0', '0', '5', 'Good', '1');
+
+INSERT INTO auction 
+(`AuctionID`, `ItemID`, `UserID`,`IsOver`) 
+VALUES ('2', 2,2, '0');
+
+INSERT INTO auction 
+(`AuctionID`, `ItemID`, UserID, `IsOver`) 
+VALUES ('3', 3,2, '0');
+
+INSERT INTO auction 
+(`AuctionID`, `ItemID`, `UserID`, `HighestBidPrice`, `IsOver`, `IsVoid`, `IsButItNow`, `Rating`, `Comments`, `Quantity`) 
+VALUES (4, '1', '3', '50000', '1', '0', '0', '5', 'Good', '1');
+
+INSERT INTO auction 
+(`AuctionID`, `ItemID`, `UserID`, `IsOver`, `IsVoid`, `IsButItNow`) 
+VALUES (5, '2', '1', '0', '0', '0');
+
+
+INSERT INTO `bid` (`BidderID`, `AuctionID`, `BidPrice`, `BidTime`) VALUES ('1', '2', '1000', '2014-4-1 12:00:00');
+INSERT INTO `bid` (`BidderID`, `AuctionID`, `BidPrice`, `BidTime`) VALUES ('3', '2', '1100', '2014-4-1 12:00:00');
+INSERT INTO `bid` (`BidderID`, `AuctionID`, `BidPrice`, `BidTime`) VALUES ('2', '1', '50000', '2014-4-1 12:00:00');
+
